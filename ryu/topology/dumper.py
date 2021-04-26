@@ -35,6 +35,13 @@ class DiscoveryEventDumper(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(DiscoveryEventDumper, self).__init__(*args, **kwargs)
+	self.Opt1 = open('//home//parin//ryu//Logfile//switch_in.txt','w')
+	self.Opt2 = open('//home//parin//ryu//Logfile//switch_out.txt','w')
+	self.Opt3 = open('//home//parin//ryu//Logfile//port_add.txt','w')
+	self.Opt4 = open('//home//parin//ryu//Logfile//port_del.txt','w')
+	self.Opt5 = open('//home//parin//ryu//Logfile//port_modify.txt','w')
+	self.Opt6 = open('//home//parin//ryu//Logfile//link_add.txt','w')
+	self.Opt7 = open('//home//parin//ryu//Logfile//link_del.txt','w')
 
         # For testing when sync and async request.
 #        self.threads.append(
@@ -52,30 +59,51 @@ class DiscoveryEventDumper(app_manager.RyuApp):
     @handler.set_ev_cls(event.EventSwitchEnter)
     def switch_enter_handler(self, ev):
         LOG.debug(ev)
+	txt1 = str(ev)
+	self.Opt1.write(txt1)
+	self.Opt1.write('\n')
 
     @handler.set_ev_cls(event.EventSwitchLeave)
     def switch_leave_handler(self, ev):
         LOG.debug(ev)
+        txt2 = str(ev)
+        self.Opt2.write(txt2)
+        self.Opt2.write('\n')
 
     @handler.set_ev_cls(event.EventPortAdd)
     def port_add_handler(self, ev):
         LOG.debug(ev)
+        txt3 = str(ev)
+        self.Opt3.write(txt3)
+        self.Opt3.write('\n')
 
     @handler.set_ev_cls(event.EventPortDelete)
     def port_delete_handler(self, ev):
         LOG.debug(ev)
+	txt4 = str(ev)
+        self.Opt4.write(txt4)
+        self.Opt4.write('\n')
 
     @handler.set_ev_cls(event.EventPortModify)
     def port_modify_handler(self, ev):
         LOG.debug(ev)
+	txt5 = str(ev)
+        self.Opt5.write(txt5)
+        self.Opt5.write('\n')
 
     @handler.set_ev_cls(event.EventLinkAdd)
     def link_add_handler(self, ev):
         LOG.debug(ev)
+	txt6 = str(ev)
+        self.Opt6.write(txt6)
+        self.Opt6.write('\n')
 
     @handler.set_ev_cls(event.EventLinkDelete)
     def link_del_handler(self, ev):
         LOG.debug(ev)
+	txt7 = str(ev)
+        self.Opt7.write(txt7)
+        self.Opt7.write('\n')
 
     def _switch_request_sync(self, interval):
         while self.is_active:

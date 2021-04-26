@@ -36,7 +36,7 @@ $ sudo mn --controller=remote --topo linear,2
 
 from socket import error as SocketError
 from tinyrpc.exc import InvalidReplyError
-
+from ryu.lib import hub
 
 from ryu.app.wsgi import (
     ControllerBase,
@@ -78,15 +78,15 @@ class WebSocketTopology(app_manager.RyuApp):
         msg = ev.link.to_dict()
         self._rpc_broadcall('event_link_add', msg)
 
-    @set_ev_cls(event.EventLinkDelete)
-    def _event_link_delete_handler(self, ev):
-        msg = ev.link.to_dict()
-        self._rpc_broadcall('event_link_delete', msg)
-
     @set_ev_cls(event.EventHostAdd)
     def _event_host_add_handler(self, ev):
         msg = ev.host.to_dict()
         self._rpc_broadcall('event_host_add', msg)
+        
+        @set_ev_cls(event.EventLinkDelete)
+    def _event_link_delete_handler(self, ev):
+        msg = ev.link.to_dict()
+        self._rpc_broadcall('event_link_delete', msg)
 
     def _rpc_broadcall(self, func_name, msg):
         disconnected_clients = []
@@ -115,6 +115,8 @@ class WebSocketTopologyController(ControllerBase):
 
     @websocket('topology', '/v1.0/topology/ws')
     def _websocket_handler(self, ws):
+    if rpc_client in selt.rpc_clients:
         rpc_client = WebSocketRPCClient(ws)
         self.app.rpc_clients.append(rpc_client)
         rpc_client.serve_forever()
+        

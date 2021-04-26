@@ -284,7 +284,6 @@ class WSGIApplication(object):
         name = match['controller'].__name__
         if name in self.registory:
             data = self.registory[name]
-
         controller = match['controller'](req, link, data, **self.config)
         controller.parent = self
         return controller(req)
@@ -332,5 +331,6 @@ def start_service(app_mgr):
     for instance in app_mgr.contexts.values():
         if instance.__class__ == WSGIApplication:
             return WSGIServer(instance)
+           
 
     return None
